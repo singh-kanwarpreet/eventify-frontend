@@ -15,7 +15,6 @@ export default function Home() {
 
   return (
     <div className="bg-gray-50 min-h-screen font-sans">
-      {/* ================= HERO SECTION ================= */}
       <section className="relative h-105 flex flex-col items-center justify-center text-center text-white">
         <img
           src="https://images.unsplash.com/photo-1528605105345-5344ea20e269?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -33,10 +32,10 @@ export default function Home() {
           </p>
         </div>
 
-        {/* ===== FLOATING SEARCH BAR ===== */}
+        {/*FLOATING SEARCH BAR*/}
         <div className="absolute -bottom-10 w-full px-4 flex justify-center z-20">
           <div className="bg-white rounded-2xl shadow-2xl p-3 flex items-center gap-3 w-full max-w-4xl">
-            {/* ===== Search Input ===== */}
+            {/*Search Input*/}
             <div className="flex-1 flex items-center gap-2 border rounded-xl px-4 py-3">
               <input
                 type="text"
@@ -46,7 +45,7 @@ export default function Home() {
               />
             </div>
 
-            {/* ===== Mode Select with Right Arrow ===== */}
+            {/*Mode Select with Right Arrow*/}
             <div className="relative flex-1">
               <select
                 className="border rounded-xl w-full px-4 py-3 text-gray-700 text-sm md:text-base appearance-none"
@@ -76,7 +75,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ===== Search Button ===== */}
+            {/*Search Button*/}
             <button className="bg-black hover:bg-gray-900 text-white px-6 md:px-8 py-3 rounded-xl font-medium text-sm md:text-base transition">
               Search
             </button>
@@ -84,7 +83,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= EVENTS GRID ================= */}
+      {/*EVENTS GRID*/}
       <section className="max-w-7xl mx-auto px-6 py-12 pt-24">
         <h2 className="text-2xl md:text-3xl font-semibold mb-8 text-gray-900 tracking-wide">
           Upcoming Events

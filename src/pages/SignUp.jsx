@@ -1,64 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signup } from "../features/auth";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
-const signup = () => {
+const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
 
-  const [role, setRole] = useState("USER");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [organizationName, setOrganizationName] = useState("");
-  const [description, setDescription] = useState("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setError,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      role: "USER",
+    },
+    mode: "onBlur"
+  });
 
-  const [formError, setFormError] = useState("");
+  const role = watch("role");
+  const password = watch("password");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setFormError("");
-
-    // Phone number validation
-    if (!/^\d{10}$/.test(phone)) {
-      setFormError("Phone number must be 10 digits.");
-      return;
-    }
-    // Password length validation
-    if (password.length < 6) {
-      setFormError("Password must be at least 6 characters long.");
-      return;
-    }
-
-    // Confirm password validation
-    if (password !== confirmPassword) {
-      setFormError("Passwords do not match.");
-      return;
-    }
-
-    const payload = {
-      name,
-      email,
-      password,
-      phone,
-      dateOfBirth,
-      organizationName: role === "ORGANIZER" ? organizationName : "",
-      description: role === "ORGANIZER" ? description : "",
-      role,
-    };
-
+  const onSubmit = async (data) => {
     try {
-      await dispatch(signup(payload)).unwrap();
+      await dispatch(signup(data)).unwrap();
       navigate("/");
     } catch (err) {
-      setFormError(err || "signup failed. Please try again.");
+      setError("root", {
+        message: err || "Signup failed. Please try again.",
+      });
     }
-
   };
 
   return (
@@ -66,94 +41,130 @@ const signup = () => {
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
 
-        {/* Display errors */}
-        {(error || formError) && (
+        {/* Top Error */}
+        {(error || errors.root) && (
           <div className="mb-4 text-red-500 text-sm text-center">
-            {formError || error}
+            {errors.root?.message || error}
           </div>
         )}
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          {/* Full Name */}
           <div>
             <label className="block text-sm font-medium mb-1">Full Name</label>
             <input
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
-              required
+              {...register("name", { required: "Name is required" })}
               className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.name && (
+              <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+            )}
           </div>
 
+          {/* Email */}
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              required
+              {...register("email", { required: "Email is required" })}
               className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+            )}
           </div>
 
+          {/* Password */}
           <div>
             <label className="block text-sm font-medium mb-1">Password</label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              required
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Minimum 6 characters required",
+                },
+              })}
               className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
+          {/* Confirm Password */}
           <div>
             <label className="block text-sm font-medium mb-1">
               Confirm Password
             </label>
             <input
               type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Re-enter your password"
-              required
+              {...register("confirmPassword", {
+                required: "Confirm password is required",
+                validate: (value) =>
+                  value === password || "Passwords do not match",
+              })}
               className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.confirmPassword.message}
+              </p>
+            )}
           </div>
 
+          {/* Phone */}
           <div>
             <label className="block text-sm font-medium mb-1">Phone</label>
             <input
               type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
               placeholder="Enter your phone number"
-              required
+              {...register("phone", {
+                required: "Phone is required",
+                pattern: {
+                  value: /^\d{10}$/,
+                  message: "Phone must be 10 digits",
+                },
+              })}
               className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.phone && (
+              <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
+            )}
           </div>
 
+          {/* Date of Birth */}
           <div>
             <label className="block text-sm font-medium mb-1">
               Date of Birth
             </label>
             <input
               type="date"
-              value={dateOfBirth}
-              onChange={(e) => setDateOfBirth(e.target.value)}
-              required
+              {...register("dateOfBirth", {
+                required: "Date of birth is required",
+              })}
               className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+            {errors.dateOfBirth && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.dateOfBirth.message}
+              </p>
+            )}
           </div>
 
+          {/* Role */}
           <div>
             <label className="block text-sm font-medium mb-1">Role</label>
             <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
+              {...register("role")}
               className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="USER">User</option>
@@ -161,6 +172,7 @@ const signup = () => {
             </select>
           </div>
 
+          {/* Organizer only fields */}
           {role === "ORGANIZER" && (
             <>
               <div>
@@ -169,12 +181,17 @@ const signup = () => {
                 </label>
                 <input
                   type="text"
-                  value={organizationName}
-                  onChange={(e) => setOrganizationName(e.target.value)}
                   placeholder="Enter organization name"
-                  required
+                  {...register("organizationName", {
+                    required: "Organization name required",
+                  })}
                   className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                {errors.organizationName && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.organizationName.message}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -182,16 +199,22 @@ const signup = () => {
                   Description
                 </label>
                 <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
                   placeholder="Enter description"
-                  required
+                  {...register("description", {
+                    required: "Description required",
+                  })}
                   className="w-full border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                {errors.description && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.description.message}
+                  </p>
+                )}
               </div>
             </>
           )}
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -216,4 +239,4 @@ const signup = () => {
   );
 };
 
-export default signup;
+export default Signup;
