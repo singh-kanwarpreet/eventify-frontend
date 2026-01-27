@@ -26,7 +26,7 @@ export default function EventCard({ event }) {
         </p>
 
         <Link
-          to={`/events/${event._id}`}
+          to={`/event/${event._id}`}
           className="block text-center bg-black text-white py-2 rounded-lg hover:bg-gray-800 font-medium transition"
         >
           View Details

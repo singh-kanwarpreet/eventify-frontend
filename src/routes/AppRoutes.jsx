@@ -5,6 +5,7 @@ import Home from "../pages/Home";
 import ProtectedRoute from "./ProtectedRoute";
 import EventDetails from "../pages/EventDetails";
 import Navbar from "../components/Navbar.jsx";
+
 const AppRoutes = () => {
   return (
     <>
@@ -16,8 +17,6 @@ const AppRoutes = () => {
           <Route path="/signup" element={<Signup />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/event/:id" element={<EventDetails />} />
-            {/* <Route path="/profile" element={<Profile />} />
-          <Route path="/orders" element={<Orders />} /> */}
           </Route>
         </Routes>
       </Router>
