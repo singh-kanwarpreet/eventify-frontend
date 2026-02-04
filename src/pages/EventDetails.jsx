@@ -127,7 +127,7 @@ const EventDetails = () => {
 
       {/* Register Button */}
       <div className="mt-8 text-center">
-        {["COMPLETED", "ARCHIVED"].includes(event.status) ? (
+        {["COMPLETED", "ARCHIVED", "ONGOING"].includes(event.status) ? (
           <button
             disabled
             className="px-6 py-2 rounded-lg bg-gray-300 text-gray-600 cursor-not-allowed"

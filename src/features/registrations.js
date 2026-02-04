@@ -6,17 +6,25 @@ import {
 
 export const fetchMyRegistrations = createAsyncThunk(
   "registrations/fetchMine",
-  async () => {
-    const data = await fetchMyRegistrationsAPI();
-    return data.registrations;
+  async (_, {rejectWithValue}) => {
+    try {
+      const data = await fetchMyRegistrationsAPI();
+      return data.registrations;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || "Failed to fetch registrations");
+    }
   }
 );
 
 export const registerForEvent = createAsyncThunk(
   "registrations/register",
-  async (eventId) => {
-    await registerAPI(eventId);
-    return eventId;
+  async (eventId,{rejectWithValue}) => {
+    try {
+      await registerAPI(eventId);
+      return eventId;
+    } catch (error) {
+      return rejectWithValue(error?.response?.data?.message || "Failed to register for event");
+    }
   }
 );
 
@@ -49,7 +57,7 @@ const slice = createSlice({
         state.loading = true;
       })
       .addCase(registerForEvent.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.error = action.payload;
         state.loading = false;
       });
   },
