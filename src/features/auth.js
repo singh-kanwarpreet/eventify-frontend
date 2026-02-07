@@ -42,13 +42,10 @@ export const logout = createAsyncThunk(
   },
 );
 
-export const getMe = createAsyncThunk(
-  "auth/rememberMe",
-  async (_, { rejectWithValue }) => {
-    const res = await getCurrentUser();
-    return res.user;
-  },
-);
+export const getMe = createAsyncThunk("auth/rememberMe", async () => {
+  const res = await getCurrentUser();
+  return res.user;
+});
 
 const initialState = {
   user: null,
