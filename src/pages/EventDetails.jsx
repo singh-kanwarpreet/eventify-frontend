@@ -16,16 +16,18 @@ const EventDetails = () => {
   const loading = useSelector((state) => state.events.loading);
   const error = useSelector((state) => state.events.error);
   const allEvents = useSelector((state) => state.events.events);
+
   const registrations = useSelector(
     (state) => state.registrations.registeredEvents,
   );
-
   useEffect(() => {
-    dispatch(fetchMyRegistrations());
-  }, [dispatch]);
+    if (!registrations?.length) {
+      dispatch(fetchMyRegistrations());
+    }
+  }, [dispatch, registrations]);
 
   const registeredIds = useMemo(
-    () => new Set(registrations.map((r) => r.eventId)),
+    () => new Set(registrations.map((r) => r.eventId._id)),
     [registrations],
   );
 

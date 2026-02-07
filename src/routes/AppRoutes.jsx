@@ -6,6 +6,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import EventDetails from "../pages/EventDetails";
 import Navbar from "../components/Navbar.jsx";
 import GuestRoute from "./GuestRoute.jsx";
+import EventRegistrationPage from "../pages/MyRegistrations.jsx";
 
 const AppRoutes = () => {
   return (
@@ -22,6 +23,10 @@ const AppRoutes = () => {
 
           <Route element={<ProtectedRoute />}>
             <Route path="/event/:id" element={<EventDetails />} />
+            <Route
+              path="/myregistrations"
+              element={<EventRegistrationPage />}
+            />
           </Route>
         </Routes>
       </Router>
