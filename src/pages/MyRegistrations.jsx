@@ -13,10 +13,10 @@ export default function EventRegistrationPage() {
   const [activeTab, setActiveTab] = useState("UPCOMING");
 
   useEffect(() => {
-    if (!registeredEvents.length) {
+    if (!registeredEvents || registeredEvents.length === 0) {
       dispatch(fetchMyRegistrations());
     }
-  }, [dispatch, registeredEvents.length]);
+  }, [dispatch]);
 
   const filteredEvents = registeredEvents.filter(
     (event) => event.eventId?.status === activeTab,
@@ -43,7 +43,7 @@ export default function EventRegistrationPage() {
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Title */}
-        <h1 className="text-2xl sm:text-3xl font-bold mb-6">
+        <h1 className="text-2xl mt-20 sm:text-3xl font-bold mb-6">
           My Registrations
         </h1>
 

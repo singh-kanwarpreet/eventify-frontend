@@ -1,36 +1,56 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Home from "../pages/Home";
-import ProtectedRoute from "./ProtectedRoute";
 import EventDetails from "../pages/EventDetails";
-import Navbar from "../components/Navbar.jsx";
-import GuestRoute from "./GuestRoute.jsx";
-import EventRegistrationPage from "../pages/MyRegistrations.jsx";
+import EventRegistrationPage from "../pages/MyRegistrations";
+
+import Navbar from "../components/Navbar";
+
+import ProtectedRoute from "./ProtectedRoute";
+import GuestRoute from "./GuestRoute";
+import RoleRoute from "./RoleRoute";
+
+/* Organizer pages */
+// import Dashboard from "../organizer/Dashboard";
+import CreateEvent from "../pages/organizer/CreateEvent";
+// import ManageEvent from "../organizer/ManageEvent";
 
 const AppRoutes = () => {
   return (
-    <>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
+    <Router>
+      <Navbar />
 
-          <Route element={<GuestRoute />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Route>
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={<Home />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="/event/:id" element={<EventDetails />} />
-            <Route
-              path="/myregistrations"
-              element={<EventRegistrationPage />}
-            />
-          </Route>
-        </Routes>
-      </Router>
-    </>
+        {/* Guest only */}
+        <Route element={<GuestRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Route>
+
+        {/* Logged-in users */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/event/:id" element={<EventDetails />} />
+        </Route>
+
+        {/* USER only routes */}
+        <Route element={<RoleRoute allowedRoles={["USER"]} />}>
+          <Route path="/myregistrations" element={<EventRegistrationPage />} />
+        </Route>
+
+        {/* ORGANIZER only routes */}
+        <Route element={<RoleRoute allowedRoles={["ORGANIZER"]} />}>
+          <Route path="/organizer/createevent" element={<CreateEvent />} />
+          {/* <Route path="/organizer/dashboard" element={<Dashboard />} />
+          
+          <Route path="/organizer/manageevent" element={<ManageEvent />} /> */}
+        </Route>
+      </Routes>
+    </Router>
   );
 };
 

@@ -11,6 +11,6 @@ export const fetchEventByIdAPI = async (id) => {
 };
 
 export const createEventAPI = async (eventData) => {
-  const res = await axios.post("events", eventData);
+  const res = await axios.post("/events/organizer/create", eventData);
   return res.data;
 };

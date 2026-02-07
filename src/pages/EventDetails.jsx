@@ -21,13 +21,13 @@ const EventDetails = () => {
     (state) => state.registrations.registeredEvents,
   );
   useEffect(() => {
-    if (!registrations?.length) {
+    if (!registrations || registrations.length === 0) {
       dispatch(fetchMyRegistrations());
     }
-  }, [dispatch, registrations]);
+  }, [dispatch]);
 
   const registeredIds = useMemo(
-    () => new Set(registrations.map((r) => r.eventId._id)),
+    () => new Set(registrations.map((r) => r.eventId?._id)),
     [registrations],
   );
 

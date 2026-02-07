@@ -12,7 +12,9 @@ export default function Home() {
   const [mode, setMode] = useState("");
 
   useEffect(() => {
-    dispatch(fetchEvents());
+    if (events.length === 0 && !loading) {
+      dispatch(fetchEvents());
+    }
   }, [dispatch]);
 
   const filteredEvents = useMemo(() => {
