@@ -5,6 +5,7 @@ import Signup from "../pages/Signup";
 import Home from "../pages/Home";
 import EventDetails from "../pages/EventDetails";
 import EventRegistrationPage from "../pages/MyRegistrations";
+import ManageAttendance from "../pages/organizer/ManageAttendance";
 
 import Navbar from "../components/Navbar";
 
@@ -44,7 +45,8 @@ const AppRoutes = () => {
 
         {/* ORGANIZER only routes */}
         <Route element={<RoleRoute allowedRoles={["ORGANIZER"]} />}>
-          <Route path="/organizer/createevent" element={<CreateEvent />} />
+          <Route path="/createevent" element={<CreateEvent />} />
+          <Route path="/manageattendance/:id" element={<ManageAttendance />} />
           {/* <Route path="/organizer/dashboard" element={<Dashboard />} />
           
           <Route path="/organizer/manageevent" element={<ManageEvent />} /> */}

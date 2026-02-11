@@ -27,7 +27,7 @@ export default function EventCreatePage() {
       await dispatch(createEvent(formData)).unwrap();
       alert("Event Created ✅");
     } catch (err) {
-      console.error(err);
+      alert("Error creating event: " + (err || ""));
     }
   };
 
