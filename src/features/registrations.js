@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchMyRegistrationsAPI, registerAPI } from "../api/registerationAPI";
+import { fetchMyRegistrationsAPI, registerAPI, fetchRegistrationsForEventAPI,markAttendanceBulkAPI  } from "../api/registerationAPI";
 
 export const fetchMyRegistrations = createAsyncThunk(
   "registrations/fetchMine",
@@ -10,6 +10,34 @@ export const fetchMyRegistrations = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error?.response?.data?.message || "Failed to fetch registrations",
+      );
+    }
+  },
+);
+
+export const fetchRegistrationsForEvent = createAsyncThunk(
+  "registrations/fetchForEvent",
+  async (eventId, { rejectWithValue }) => {
+    try {
+      const data = await fetchRegistrationsForEventAPI(eventId);
+      return data.registrations;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Failed to fetch registrations for event",
+      );
+    }
+  },
+);
+
+export const markAttendanceBulk = createAsyncThunk(
+  "registrations/markAttendanceBulk",
+  async ({ eventId, attendanceData }, { rejectWithValue }) => {
+    try {
+      const data = await markAttendanceBulkAPI(eventId, attendanceData);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Failed to mark attendance",
       );
     }
   },
@@ -35,6 +63,7 @@ const slice = createSlice({
     registeredEvents: [],
     error: null,
     loading: false,
+    eventRegistrations: [],
   },
   extraReducers: (builder) => {
     builder
@@ -57,6 +86,27 @@ const slice = createSlice({
         state.loading = true;
       })
       .addCase(registerForEvent.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchRegistrationsForEvent.fulfilled, (state, action) => {
+        state.eventRegistrations = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchRegistrationsForEvent.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchRegistrationsForEvent.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+      })
+        .addCase(markAttendanceBulk.fulfilled, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(markAttendanceBulk.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(markAttendanceBulk.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
       });
