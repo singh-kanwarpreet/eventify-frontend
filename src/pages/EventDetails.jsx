@@ -7,23 +7,25 @@ import {
   registerForEvent,
 } from "../features/registrations";
 import EventCard from "../components/EventCard";
+import { Link } from "react-router-dom";
 
 const EventDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
   const role = useSelector((state) => state.auth.user?.role);
+  const userId = useSelector((state) => state.auth.user?.id);
   const event = useSelector((state) => state.events.selectedEvent);
   const loading = useSelector((state) => state.events.loading);
   const error = useSelector((state) => state.events.error);
   const allEvents = useSelector((state) => state.events.events);
   const registrations = useSelector(
-    (state) => state.registrations.registeredEvents
+    (state) => state.registrations.registeredEvents,
   );
 
   useEffect(() => {
-    if(role === "USER" && registrations.length === 0)
-    dispatch(fetchMyRegistrations());
+    if (role === "USER" && registrations.length === 0)
+      dispatch(fetchMyRegistrations());
   }, [dispatch]);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ const EventDetails = () => {
 
   const registeredIds = useMemo(
     () => new Set(registrations?.map((r) => r.eventId?._id)),
-    [registrations]
+    [registrations],
   );
 
   const recommendedEvents = useMemo(() => {
@@ -43,7 +45,7 @@ const EventDetails = () => {
             e._id !== id &&
             e.status === "UPCOMING" &&
             e.availableSeats > 0 &&
-            !registeredIds.has(e._id)
+            !registeredIds.has(e._id),
         )
         .slice(0, 3) || []
     );
@@ -58,7 +60,7 @@ const EventDetails = () => {
           ...event,
           isRegistered: true,
           availableSeats: event.availableSeats - 1,
-        })
+        }),
       );
 
       alert("Registration successful!");
@@ -73,9 +75,7 @@ const EventDetails = () => {
     );
 
   if (error)
-    return (
-      <p className="pt-20 p-8 text-center text-red-500">{error}</p>
-    );
+    return <p className="pt-20 p-8 text-center text-red-500">{error}</p>;
 
   if (!event)
     return (
@@ -147,7 +147,8 @@ const EventDetails = () => {
         <div className="mb-6">
           <h2 className="text-gray-500 text-sm mb-1">Eligibility Age</h2>
           <p className="text-gray-800">
-            {event.eligibilityRules.minAge} - {event.eligibilityRules.maxAge} years
+            {event.eligibilityRules.minAge} - {event.eligibilityRules.maxAge}{" "}
+            years
           </p>
         </div>
       )}
@@ -167,7 +168,7 @@ const EventDetails = () => {
                 disabled
                 className="px-6 py-2 rounded-lg bg-blue-200 text-blue-800 cursor-not-allowed"
               >
-                Registered 
+                Registered
               </button>
             ) : event.availableSeats === 0 ? (
               <button
@@ -188,7 +189,9 @@ const EventDetails = () => {
 
           {recommendedEvents.length > 0 && (
             <div className="mt-14">
-              <h2 className="text-2xl font-semibold mb-6">Recommended Events</h2>
+              <h2 className="text-2xl font-semibold mb-6">
+                Recommended Events
+              </h2>
               <div className="grid md:grid-cols-3 gap-6">
                 {recommendedEvents.map((ev) => (
                   <EventCard key={ev._id} event={ev} />
@@ -197,6 +200,16 @@ const EventDetails = () => {
             </div>
           )}
         </>
+      )}
+      {role === "ORGANIZER" && userId === event.organizerId && (
+        <div className="mt-8 text-center">
+          <Link
+            to={`/manageattendance/${id}`}
+            className="inline-block px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+          >
+            Manage Attendance
+          </Link>
+        </div>
       )}
     </div>
   );
