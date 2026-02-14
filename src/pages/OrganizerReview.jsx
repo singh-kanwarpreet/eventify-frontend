@@ -38,13 +38,13 @@ const OrganizerReview = () => {
   };
 
   if (loadingDetails)
-    return <p className="text-gray-500 text-center p-4">Loading organizer details...</p>;
+    return <p className="text-gray-500 text-center p-4 mt-20">Loading organizer details...</p>;
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
       {/* Organizer Info */}
       {selectedOrganizer && (
-        <div className="mt-6 p-6 rounded-xl shadow-md bg-linear-to-br from-white to-indigo-50">
+        <div className="mt-20 p-6 rounded-xl shadow-md bg-linear-to-br from-white to-indigo-50">
           <h2 className="text-3xl font-bold text-indigo-700 mb-2">
             {selectedOrganizer.organizationName}
           </h2>
