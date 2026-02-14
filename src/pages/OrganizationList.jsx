@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrganizerList } from "../features/organizerReview";
 import { Link } from "react-router-dom";
@@ -8,6 +8,10 @@ const OrganizationList = () => {
   const { organizers, loadingOrganizers } = useSelector(
     (state) => state.organizer
   );
+
+  const [search, setSearch] = useState("");
+  const [filteredOrganizers, setFilteredOrganizers] = useState([]);
+
   useEffect(() => {
     dispatch(fetchOrganizerList())
       .unwrap()
@@ -15,6 +19,18 @@ const OrganizationList = () => {
         console.error("Failed to load organizers:", err);
       });
   }, [dispatch]);
+
+  useEffect(() => {
+    if (search.trim() === "") {
+      setFilteredOrganizers(organizers);
+    } else {
+      setFilteredOrganizers(
+        organizers.filter((org) =>
+          org.organizationName.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    }
+  }, [search, organizers]);
 
   if (loadingOrganizers)
     return (
@@ -29,13 +45,24 @@ const OrganizationList = () => {
         Organizations
       </h2>
 
-      {organizers.length === 0 ? (
+      {/* Search Bar */}
+      <div className="flex justify-center mb-6">
+        <input
+          type="text"
+          placeholder="Search organizations..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full max-w-md px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        />
+      </div>
+
+      {filteredOrganizers.length === 0 ? (
         <p className="text-center text-gray-400 text-lg">
           No organizers found.
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {organizers.map((org) => (
+          {filteredOrganizers.map((org) => (
             <div
               key={org._id}
               className="border rounded-xl p-5 flex flex-col items-center text-center bg-linear-to-br from-white to-indigo-50 shadow-lg hover:shadow-2xl transition-shadow duration-300 h-72"
