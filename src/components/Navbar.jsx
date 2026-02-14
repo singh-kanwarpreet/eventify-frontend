@@ -23,7 +23,7 @@ const Navbar = () => {
       return [
         { label: "Home", path: "/" },
         { label: "Login", path: "/login" },
-        { label: "Register", path: "/register" },
+        { label: "Register", path: "/signup" },
       ];
     }
 

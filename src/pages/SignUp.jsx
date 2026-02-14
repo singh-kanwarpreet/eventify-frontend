@@ -1,13 +1,20 @@
-import React from "react";
+
 import { useDispatch, useSelector } from "react-redux";
-import { signup } from "../features/auth";
+import { signup, clearError } from "../features/auth";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import {useEffect } from "react";
 
 const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, [dispatch]);
 
   const {
     register,
@@ -38,7 +45,7 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-full mt-20 max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Create Account</h2>
 
         {/* Top Error */}
