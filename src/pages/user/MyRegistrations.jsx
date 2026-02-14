@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchMyRegistrations } from "../features/registrations";
-import EventCard from "../components/EventCard";
+import { fetchMyRegistrations } from "../../features/registrations";
+import EventCard from "../../components/EventCard";
 
 export default function EventRegistrationPage() {
   const dispatch = useDispatch();

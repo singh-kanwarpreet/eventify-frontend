@@ -4,10 +4,10 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import Home from "../pages/Home";
 import EventDetails from "../pages/EventDetails";
-import EventRegistrationPage from "../pages/MyRegistrations";
+import EventRegistrationPage from "../pages/user/MyRegistrations";
 import ManageAttendance from "../pages/organizer/ManageAttendance";
-import OrganizationList from "../pages/OrganizationList";
-import OrganizerReview from "../pages/OrganizerReview";
+import OrganizationList from "../pages/user/OrganizationList";
+import OrganizerReview from "../pages/user/OrganizerReview";
 import Navbar from "../components/Navbar";
 
 import ProtectedRoute from "./ProtectedRoute";

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchOrganizerDetails, addOrganizerReview } from "../features/organizerReview";
+import { fetchOrganizerDetails, addOrganizerReview } from "../../features/organizerReview";
 import { useForm } from "react-hook-form";
 
 const OrganizerReview = () => {

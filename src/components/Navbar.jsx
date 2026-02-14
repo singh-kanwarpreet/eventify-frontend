@@ -33,8 +33,6 @@ const Navbar = () => {
         { label: "Home", path: "/" },
         { label: "Dashboard", path: "/organizer/dashboard" },
         { label: "Create Event", path: "/createevent" },
-        { label: "Manage Event", path: "/organizer/manageevent" },
-        { label: "Manage Attendance", path: "/manageattendance/:id" },
         { label: "Logout", action: handleLogout },
       ];
     }
