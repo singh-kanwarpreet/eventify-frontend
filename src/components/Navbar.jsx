@@ -43,6 +43,7 @@ const Navbar = () => {
     return [
       { label: "Home", path: "/" },
       { label: "My Registrations", path: "/myregistrations" },
+      { label: "Organizer Review", path: "/organizerreview" },
       { label: "Logout", action: handleLogout },
     ];
   }, [isLoggedIn, user]);

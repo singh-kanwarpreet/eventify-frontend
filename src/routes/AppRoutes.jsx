@@ -6,7 +6,8 @@ import Home from "../pages/Home";
 import EventDetails from "../pages/EventDetails";
 import EventRegistrationPage from "../pages/MyRegistrations";
 import ManageAttendance from "../pages/organizer/ManageAttendance";
-
+import OrganizationList from "../pages/OrganizationList";
+import OrganizerReview from "../pages/OrganizerReview";
 import Navbar from "../components/Navbar";
 
 import ProtectedRoute from "./ProtectedRoute";
@@ -41,6 +42,8 @@ const AppRoutes = () => {
         {/* USER only routes */}
         <Route element={<RoleRoute allowedRoles={["USER"]} />}>
           <Route path="/myregistrations" element={<EventRegistrationPage />} />
+          <Route path="/organizerreview" element={<OrganizationList />} />
+          <Route path="/organizer/:id/reviews" element={<OrganizerReview />} />
         </Route>
 
         {/* ORGANIZER only routes */}
