@@ -1,19 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchMyRegistrationsAPI, registerAPI, fetchRegistrationsForEventAPI,markAttendanceBulkAPI  } from "../api/registerationAPI";
+import {
+  fetchMyRegistrationsAPI,
+  registerAPI,
+  fetchRegistrationsForEventAPI,
+  markAttendanceBulkAPI,
+} from "../api/registerationAPI";
 
+// FETCH MY REGISTRATIONS
 export const fetchMyRegistrations = createAsyncThunk(
   "registrations/fetchMine",
-  async (_, { rejectWithValue }) => {
+  async ({ page = 1, limit = 6, status } = {}, { rejectWithValue }) => {
     try {
-      const data = await fetchMyRegistrationsAPI();
-      return data.registrations;
+      const data = await fetchMyRegistrationsAPI({ page, limit, status });
+      return data; 
     } catch (error) {
-      return rejectWithValue(
-        error?.response?.data?.message || "Failed to fetch registrations",
-      );
+      return rejectWithValue(error?.response?.data?.message || "Failed to fetch registrations");
     }
-  },
+  }
 );
+
 
 export const fetchRegistrationsForEvent = createAsyncThunk(
   "registrations/fetchForEvent",
@@ -23,7 +28,8 @@ export const fetchRegistrationsForEvent = createAsyncThunk(
       return data.registrations;
     } catch (error) {
       return rejectWithValue(
-        error?.response?.data?.message || "Failed to fetch registrations for event",
+        error?.response?.data?.message ||
+          "Failed to fetch registrations for event",
       );
     }
   },
@@ -61,21 +67,26 @@ const slice = createSlice({
   name: "registrations",
   initialState: {
     registeredEvents: [],
-    error: null,
     loading: false,
+    pagination: { page: 1, limit: 6, totalPages: 1, total: 0 },
     eventRegistrations: [],
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMyRegistrations.fulfilled, (state, action) => {
-        state.registeredEvents = action.payload;
+        state.registeredEvents = action.payload.registrations || [];
+        state.pagination = action.payload.pagination || {
+          page: 1,
+          limit: 6,
+          totalPages: 1,
+          total: 0,
+        };
         state.loading = false;
       })
       .addCase(fetchMyRegistrations.pending, (state) => {
         state.loading = true;
       })
       .addCase(fetchMyRegistrations.rejected, (state, action) => {
-        state.error = action.error.message;
         state.loading = false;
       })
       .addCase(registerForEvent.fulfilled, (state, action) => {
@@ -97,17 +108,15 @@ const slice = createSlice({
         state.loading = true;
       })
       .addCase(fetchRegistrationsForEvent.rejected, (state, action) => {
-        state.error = action.payload;
         state.loading = false;
       })
-        .addCase(markAttendanceBulk.fulfilled, (state, action) => {
+      .addCase(markAttendanceBulk.fulfilled, (state, action) => {
         state.loading = false;
       })
       .addCase(markAttendanceBulk.pending, (state) => {
         state.loading = true;
       })
       .addCase(markAttendanceBulk.rejected, (state, action) => {
-        state.error = action.payload;
         state.loading = false;
       });
   },

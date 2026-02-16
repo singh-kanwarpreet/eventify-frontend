@@ -1,6 +1,6 @@
 import axios from "./axios";
 
-export const fetchEventsAPI = async () => {
+export const fetchEventsAPI = async (page = 1, limit = 6) => {
   const res = await axios.get("events");
   return res.data;
 };

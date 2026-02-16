@@ -8,10 +8,10 @@ import {
 /*FETCH ALL*/
 export const fetchEvents = createAsyncThunk(
   "events/fetchAll",
-  async (_, { rejectWithValue }) => {
+  async ({ page = 1, limit = 6 } = {}, { rejectWithValue }) => {
     try {
-      const data = await fetchEventsAPI();
-      return data.events;
+      const data = await fetchEventsAPI(page, limit);
+      return data;
     } catch (err) {
       return rejectWithValue(
         err.response?.data?.message || "Failed to fetch events",
@@ -54,7 +54,7 @@ const initialState = {
   events: [],
   selectedEvent: null,
   loading: false,
-  error: null,
+  pagination: null,
 };
 
 const eventsSlice = createSlice({
@@ -71,21 +71,19 @@ const eventsSlice = createSlice({
       /* FETCH ALL */
       .addCase(fetchEvents.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(fetchEvents.fulfilled, (state, action) => {
         state.loading = false;
-        state.events = action.payload;
+        state.events = action.payload.events;
+        state.pagination = action.payload.pagination;
       })
       .addCase(fetchEvents.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
       })
 
       /* FETCH BY ID */
       .addCase(fetchEventById.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(fetchEventById.fulfilled, (state, action) => {
         state.loading = false;
@@ -93,13 +91,11 @@ const eventsSlice = createSlice({
       })
       .addCase(fetchEventById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
       })
 
       /* CREATE */
       .addCase(createEvent.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(createEvent.fulfilled, (state, action) => {
         state.loading = false;
@@ -108,7 +104,6 @@ const eventsSlice = createSlice({
       })
       .addCase(createEvent.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
       });
   },
 });
