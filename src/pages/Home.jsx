@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import EventCard from "../components/EventCard";
 import { fetchEvents } from "../features/events";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ export default function Home() {
       dispatch(fetchEvents({ page: currentPage, limit: eventsPerPage })).unwrap();
     }
     catch(error){
-      alert("Error fetching events:", error);
+      toast.error("Failed to fetch events");
     }
   }, [dispatch, currentPage]);
 
@@ -59,7 +60,11 @@ export default function Home() {
 
       {/* Events Grid */}
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 text-lg animate-pulse">
+          Loading events...
+        </p>
+      </div>
       ) : (
         <>
           <div className="grid md:grid-cols-3 gap-6">

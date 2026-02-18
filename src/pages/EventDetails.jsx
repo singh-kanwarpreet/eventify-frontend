@@ -7,7 +7,7 @@ import {
   registerForEvent,
 } from "../features/registrations";
 import EventCard from "../components/EventCard";
-import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const EventDetails = () => {
   const { id } = useParams();
@@ -24,12 +24,20 @@ const EventDetails = () => {
   );
 
   useEffect(() => {
-    if (role === "USER" && registrations.length === 0)
-      dispatch(fetchMyRegistrations());
+    try {
+      if (role === "USER" && registrations.length === 0)
+        dispatch(fetchMyRegistrations());
+    } catch (err) {
+      toast.error("Failed to fetch event details");
+    }
   }, [dispatch]);
 
   useEffect(() => {
+    try {
     if (id) dispatch(fetchEventById(id));
+    } catch (err) {
+      toast.error("Failed to fetch event details");
+    }
   }, [dispatch, id]);
 
   const registeredIds = useMemo(
@@ -71,7 +79,11 @@ const EventDetails = () => {
 
   if (loading)
     return (
-      <p className="pt-20 p-8 text-center text-gray-500">Loading event...</p>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 text-lg animate-pulse">
+          Loading event details...
+        </p>
+      </div>
     );
 
   if (error)
@@ -200,16 +212,6 @@ const EventDetails = () => {
             </div>
           )}
         </>
-      )}
-      {role === "ORGANIZER" && userId === event.organizerId && (
-        <div className="mt-8 text-center">
-          <Link
-            to={`/manageattendance/${id}`}
-            className="inline-block px-6 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
-          >
-            Manage Attendance
-          </Link>
-        </div>
       )}
     </div>
   );

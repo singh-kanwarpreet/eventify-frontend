@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import {
   fetchOrganizerDashboard,
   deleteEvent,
@@ -15,39 +16,58 @@ export default function Dashboard() {
   );
 
   useEffect(() => {
-    dispatch(fetchOrganizerDashboard());
+    try {
+      dispatch(fetchOrganizerDashboard());
+    } catch (err) {
+      toast.error("Failed to fetch dashboard");
+    }
   }, [dispatch]);
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
-      await dispatch(deleteEvent(id));
+      try {
+        await dispatch(deleteEvent(id));
+        toast.success("Event deleted successfully");
+      } catch (err) {
+        toast.error("Failed to delete event");
+      }
     }
   };
 
   const handleArchive = async (id) => {
     if (window.confirm("Are you sure you want to archive this event?")) {
-      await dispatch(archiveEvent(id));
+      try {
+        await dispatch(archiveEvent(id));
+        toast.success("Event archived successfully");
+      } catch (err) {
+        toast.error("Failed to archive event");
+      }
     }
   };
 
   const handleUnarchive = async (id) => {
     if (window.confirm("Are you sure you want to unarchive this event?")) {
-      await dispatch(unarchiveEvent(id));
+      try {
+        await dispatch(unarchiveEvent(id));
+        toast.success("Event unarchived successfully");
+      } catch (err) {
+        toast.error("Failed to unarchive event");
+      }
     }
   };
 
   if (loading)
     return (
-      <p className="text-center mt-20 text-gray-500 text-lg animate-pulse">
-        Loading dashboard...
-      </p>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 text-lg animate-pulse">
+          Loading dashboard...
+        </p>
+      </div>
     );
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold mt-20 mb-6">
-        Organizer Dashboard
-      </h1>
+      <h1 className="text-3xl font-bold mt-20 mb-6">Organizer Dashboard</h1>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
@@ -61,9 +81,7 @@ export default function Dashboard() {
         </div>
         <div className="bg-white p-6 rounded shadow">
           <h2>Average Rating</h2>
-          <p className="text-2xl">
-            {Number(stats.avgRating || 0).toFixed(1)}
-          </p>
+          <p className="text-2xl">{Number(stats.avgRating || 0).toFixed(1)}</p>
         </div>
       </div>
 
@@ -78,9 +96,7 @@ export default function Dashboard() {
             <p className="text-sm text-gray-600">
               {new Date(event.startTime).toLocaleString()}
             </p>
-            <p className="text-sm font-medium mt-1">
-              Status: {event.status}
-            </p>
+            <p className="text-sm font-medium mt-1">Status: {event.status}</p>
 
             <div className="flex flex-wrap gap-2 mt-4">
               <Link

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { fetchEventRegistrations,markAttendanceBulk } from "../../features/organizerDashboard";
+import { toast } from "react-toastify";
 
 const ManageAttendance = () => {
   const { id: eventId } = useParams();
@@ -15,7 +16,11 @@ const ManageAttendance = () => {
   const [registrations, setRegistrations] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchEventRegistrations(eventId));
+    try {
+      dispatch(fetchEventRegistrations(eventId));
+    } catch (err) {
+      toast.error("Failed to fetch registrations");
+    }
   }, [dispatch, eventId]);
 
   // copy redux to local
@@ -40,13 +45,12 @@ const ManageAttendance = () => {
     }));
     try{
       await dispatch(markAttendanceBulk({ eventId, attendanceData })).unwrap();
-      alert("Attendance marked successfully!");
+      toast.success("Attendance marked successfully");
     }
     catch(error){
+      toast.error("Failed to mark attendance");
       console.error("Error marking attendance:", error);
     }
-    console.log("Final Attendance Data:", attendanceData);
-
     
   };
 

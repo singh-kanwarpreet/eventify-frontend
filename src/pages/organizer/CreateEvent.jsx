@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { createEvent } from "../../features/events";
+import { toast } from "react-toastify";
+
 export default function EventCreatePage() {
   const dispatch = useDispatch();
 
@@ -25,9 +27,9 @@ export default function EventCreatePage() {
 
     try {
       await dispatch(createEvent(formData)).unwrap();
-      alert("Event Created ✅");
+      toast.success("Event Created Successfully");
     } catch (err) {
-      alert("Error creating event: " + (err || ""));
+      toast.error(err || "Failed to create event");
     }
   };
 
