@@ -1,18 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Signup from "../pages/Signup";
-import Home from "../pages/Home";
-import EventDetails from "../pages/EventDetails";
-import EventRegistrationPage from "../pages/user/MyRegistrations";
-import ManageAttendance from "../pages/organizer/ManageAttendance";
-import OrganizationList from "../pages/user/OrganizationList";
-import OrganizerReview from "../pages/user/OrganizerReview";
-import Navbar from "../components/Navbar";
+import Login from "../pages/Login.jsx";
+import Signup from "../pages/Signup.jsx";
+import Home from "../pages/Home.jsx";
+import EventDetails from "../pages/EventDetails.jsx";
+import EventRegistrationPage from "../pages/user/MyRegistrations.jsx";
+import ManageAttendance from "../pages/organizer/ManageAttendance.jsx";
+import OrganizationList from "../pages/user/OrganizationList.jsx";
+import OrganizerReview from "../pages/user/OrganizerReview.jsx";
+import Navbar from "../components/Navbar.jsx";
 
-import ProtectedRoute from "./ProtectedRoute";
-import GuestRoute from "./GuestRoute";
-import RoleRoute from "./RoleRoute";
+import ProtectedRoute from "./ProtectedRoute.jsx";
+import GuestRoute from "./GuestRoute.jsx";
+import RoleRoute from "./RoleRoute.jsx";
 
 /* Organizer pages */
 import Dashboard from "../pages/organizer/Dashboard";
