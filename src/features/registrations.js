@@ -3,7 +3,6 @@ import {
   fetchMyRegistrationsAPI,
   registerAPI,
   fetchRegistrationsForEventAPI,
-  markAttendanceBulkAPI,
 } from "../api/registerationAPI";
 
 // FETCH MY REGISTRATIONS
@@ -35,19 +34,6 @@ export const fetchRegistrationsForEvent = createAsyncThunk(
   },
 );
 
-export const markAttendanceBulk = createAsyncThunk(
-  "registrations/markAttendanceBulk",
-  async ({ eventId, attendanceData }, { rejectWithValue }) => {
-    try {
-      const data = await markAttendanceBulkAPI(eventId, attendanceData);
-      return data;
-    } catch (error) {
-      return rejectWithValue(
-        error?.response?.data?.message || "Failed to mark attendance",
-      );
-    }
-  },
-);
 
 export const registerForEvent = createAsyncThunk(
   "registrations/register",
@@ -109,16 +95,8 @@ const slice = createSlice({
       })
       .addCase(fetchRegistrationsForEvent.rejected, (state, action) => {
         state.loading = false;
-      })
-      .addCase(markAttendanceBulk.fulfilled, (state, action) => {
-        state.loading = false;
-      })
-      .addCase(markAttendanceBulk.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(markAttendanceBulk.rejected, (state, action) => {
-        state.loading = false;
       });
+      
   },
 });
 

@@ -18,10 +18,4 @@ export const fetchRegistrationsForEventAPI = async (eventId) => {
   return res.data;
 };
 
-export const markAttendanceBulkAPI = async (eventId, attendanceData) => {
-  const res = await axios.post(
-    `events/${eventId}/registrations/mark-attendance`,
-    { attendance: attendanceData }
-  );
-  return res.data;
-};
+

@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchRegistrationsForEvent,markAttendanceBulk } from "../../features/registrations";
+import { fetchEventRegistrations,markAttendanceBulk } from "../../features/organizerDashboard";
 
 const ManageAttendance = () => {
   const { id: eventId } = useParams();
   const dispatch = useDispatch();
 
   const registrationsFromRedux = useSelector(
-    (state) => state.registrations.eventRegistrations
+    (state) => state.organizer.eventRegistrations
   );
 
   // local attendance state
   const [registrations, setRegistrations] = useState([]);
 
   useEffect(() => {
-    dispatch(fetchRegistrationsForEvent(eventId));
+    dispatch(fetchEventRegistrations(eventId));
   }, [dispatch, eventId]);
 
   // copy redux to local

@@ -15,9 +15,8 @@ import GuestRoute from "./GuestRoute";
 import RoleRoute from "./RoleRoute";
 
 /* Organizer pages */
-// import Dashboard from "../organizer/Dashboard";
+import Dashboard from "../pages/organizer/Dashboard";
 import CreateEvent from "../pages/organizer/CreateEvent";
-// import ManageEvent from "../organizer/ManageEvent";
 
 const AppRoutes = () => {
   return (
@@ -50,9 +49,8 @@ const AppRoutes = () => {
         <Route element={<RoleRoute allowedRoles={["ORGANIZER"]} />}>
           <Route path="/createevent" element={<CreateEvent />} />
           <Route path="/manageattendance/:id" element={<ManageAttendance />} />
-          {/* <Route path="/organizer/dashboard" element={<Dashboard />} />
+          <Route path="/organizer/dashboard" element={<Dashboard />} />
           
-          <Route path="/organizer/manageevent" element={<ManageEvent />} /> */}
         </Route>
       </Routes>
     </Router>
