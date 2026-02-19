@@ -1,15 +1,18 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchOrganizerDetails, addOrganizerReview } from "../../features/organizerReview";
+import {
+  fetchOrganizerDetails,
+  addOrganizerReview,
+} from "../../features/organizerReview";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const OrganizerReview = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { selectedOrganizer, reviews, loadingDetails, addingReview } = useSelector(
-    (state) => state.organizer
-  );
+  const { selectedOrganizer, reviews, loadingDetails, addingReview } =
+    useSelector((state) => state.organizer);
 
   // React Hook Form setup
   const {
@@ -26,7 +29,7 @@ const OrganizerReview = () => {
     if (id) {
       dispatch(fetchOrganizerDetails(id))
         .unwrap()
-        .catch((err) => console.error("Failed to load organizer details:", err));
+        .catch((err) => toast.error(err || "Failed to load organizer details"));
     }
   }, [dispatch, id]);
 
@@ -34,11 +37,17 @@ const OrganizerReview = () => {
     dispatch(addOrganizerReview({ organizerId: id, ...data }))
       .unwrap()
       .then(() => reset({ rating: 5, comment: "" }))
-      .catch((err) => console.error("Failed to add review:", err));
+      .catch((err) => toast.error(err || "Failed to add review"));
   };
 
   if (loadingDetails)
-    return <p className="text-gray-500 text-center p-4 mt-20">Loading organizer details...</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 text-lg animate-pulse">
+          Loading organizer details...
+        </p>
+      </div>
+    );
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-6">
@@ -48,48 +57,75 @@ const OrganizerReview = () => {
           <h2 className="text-3xl font-bold text-indigo-700 mb-2">
             {selectedOrganizer.organizationName}
           </h2>
-          <p className="text-gray-700 mb-2">{selectedOrganizer.description || "No description available."}</p>
+          <p className="text-gray-700 mb-2">
+            {selectedOrganizer.description || "No description available."}
+          </p>
           <div className="flex items-center gap-4 text-gray-600 mb-2">
             <span>⭐ {selectedOrganizer.averageRating || 0}</span>
             <span>({selectedOrganizer.reviewCount || 0} reviews)</span>
           </div>
-          <p className="italic text-gray-500">Managed by: {selectedOrganizer.managedBy?.name || "N/A"}</p>
+          <p className="italic text-gray-500">
+            Managed by: {selectedOrganizer.managedBy?.name || "N/A"}
+          </p>
         </div>
       )}
 
       {/* Leave a Review */}
       <div className="p-6 rounded-xl shadow-md bg-white">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Leave a Review</h3>
+        <h3 className="text-xl font-semibold text-gray-800 mb-4">
+          Leave a Review
+        </h3>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Rating</label>
+            <label className="block text-gray-700 font-medium mb-1">
+              Rating
+            </label>
             <select
               {...register("rating", { required: "Rating is required" })}
               className={`border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 ${
-                errors.rating ? "focus:ring-red-400 border-red-400" : "focus:ring-indigo-400"
+                errors.rating
+                  ? "focus:ring-red-400 border-red-400"
+                  : "focus:ring-indigo-400"
               }`}
             >
               {[5, 4, 3, 2, 1].map((r) => (
-                <option key={r} value={r}>{r} ⭐</option>
+                <option key={r} value={r}>
+                  {r} ⭐
+                </option>
               ))}
             </select>
-            {errors.rating && <p className="text-red-500 text-sm mt-1">{errors.rating.message}</p>}
+            {errors.rating && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.rating.message}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Comment</label>
+            <label className="block text-gray-700 font-medium mb-1">
+              Comment
+            </label>
             <textarea
               {...register("comment", {
                 required: "Comment is required",
-                minLength: { value: 5, message: "Comment must be at least 5 characters" },
+                minLength: {
+                  value: 5,
+                  message: "Comment must be at least 5 characters",
+                },
               })}
               rows={3}
               placeholder="Write your review here..."
               className={`border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 ${
-                errors.comment ? "focus:ring-red-400 border-red-400" : "focus:ring-indigo-400"
+                errors.comment
+                  ? "focus:ring-red-400 border-red-400"
+                  : "focus:ring-indigo-400"
               }`}
             />
-            {errors.comment && <p className="text-red-500 text-sm mt-1">{errors.comment.message}</p>}
+            {errors.comment && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.comment.message}
+              </p>
+            )}
           </div>
 
           <button
@@ -114,8 +150,12 @@ const OrganizerReview = () => {
               className="p-4 rounded-lg shadow-sm bg-white hover:shadow-md transition"
             >
               <div className="flex justify-between items-center mb-2">
-                <div className="font-medium text-gray-800">{review.userId?.name || "Anonymous"}</div>
-                <div className="text-yellow-400 font-semibold">⭐ {review.rating}</div>
+                <div className="font-medium text-gray-800">
+                  {review.userId?.name || "Anonymous"}
+                </div>
+                <div className="text-yellow-400 font-semibold">
+                  ⭐ {review.rating}
+                </div>
               </div>
               <p className="text-gray-600">{review.comment}</p>
             </div>

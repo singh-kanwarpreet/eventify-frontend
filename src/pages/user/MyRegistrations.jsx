@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchMyRegistrations } from "../../features/registrations";
 import EventCard from "../../components/EventCard";
-
+import { toast } from "react-toastify";
 export default function EventRegistrationPage() {
   const dispatch = useDispatch();
 
-  const { registeredEvents = [], loading, pagination } = useSelector(
-    (state) => state.registrations
-  );
+  const {
+    registeredEvents = [],
+    loading,
+    pagination,
+  } = useSelector((state) => state.registrations);
 
   const [activeTab, setActiveTab] = useState("UPCOMING");
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,25 +27,26 @@ export default function EventRegistrationPage() {
             page: currentPage,
             limit: eventsPerPage,
             status: activeTab,
-          })
+          }),
         ).unwrap();
       } catch (err) {
-        alert(err);
+        toast.error(err || "Failed to fetch registrations");
       }
     };
     fetchData();
   }, [dispatch, currentPage, activeTab]);
 
-  // Reset page to 1 when tab changes
   useEffect(() => {
     setCurrentPage(1);
   }, [activeTab]);
 
   if (loading)
     return (
-      <p className="text-center mt-20 text-gray-500 text-lg animate-pulse">
-        Loading events...
-      </p>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 text-lg animate-pulse">
+          Loading registrations...
+        </p>
+      </div>
     );
 
   return (

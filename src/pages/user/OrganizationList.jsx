@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrganizerList } from "../../features/organizerReview";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const OrganizationList = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const OrganizationList = () => {
     dispatch(fetchOrganizerList())
       .unwrap()
       .catch((err) => {
-        console.error("Failed to load organizers:", err);
+        toast.error(err || "Failed to load organizers");
       });
   }, [dispatch]);
 
@@ -34,9 +35,11 @@ const OrganizationList = () => {
 
   if (loadingOrganizers)
     return (
-      <p className="p-4 text-center text-gray-500 font-medium mt-20">
-        Loading organizers...
-      </p>
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-gray-500 text-lg animate-pulse">
+          Loading organizers...
+        </p>
+      </div>
     );
 
   return (
