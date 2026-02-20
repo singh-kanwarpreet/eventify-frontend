@@ -70,10 +70,9 @@ const EventDetails = () => {
           availableSeats: event.availableSeats - 1,
         }),
       );
-
-      alert("Registration successful!");
+      toast.success("Registered successfully");
     } catch (err) {
-      console.error(err);
+      toast.error(err || "Failed to register for event");
     }
   };
 
