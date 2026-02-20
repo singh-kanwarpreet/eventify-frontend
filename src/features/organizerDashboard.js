@@ -58,7 +58,7 @@ export const fetchEventRegistrations = createAsyncThunk(
   async (eventId, { rejectWithValue }) => {
     try {
       const res = await fetchEventRegistrationsAPI(eventId);
-      return { eventId, registrations: res.registrations };
+      return { eventId, registrations: res};
     } catch (error) {
       return rejectWithValue(
         error?.response?.data?.message || "Failed to fetch event registrations",
@@ -130,6 +130,7 @@ const organizerSlice = createSlice({
       .addCase(fetchEventRegistrations.fulfilled, (state, action) => {
         state.loading = false;
         const { eventId, registrations } = action.payload;
+
         state.eventRegistrations[eventId] = registrations;
       })
       .addCase(fetchEventRegistrations.rejected, (state, action) => {
