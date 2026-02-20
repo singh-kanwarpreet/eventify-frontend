@@ -12,7 +12,6 @@ export default function EventCreatePage() {
     watch,
     formState: { errors, isSubmitting },
   } = useForm();
-
   const imageFile = watch("image");
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -20,6 +19,8 @@ export default function EventCreatePage() {
     Object.entries(data).forEach(([key, value]) => {
       if (key === "image") {
         formData.append(key, value[0]);
+      } else if (key === "startTime" || key === "endTime") {
+        formData.append(key, new Date(value).toISOString());
       } else {
         formData.append(key, value);
       }
