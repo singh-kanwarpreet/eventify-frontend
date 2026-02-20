@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const OrganizationList = () => {
   const dispatch = useDispatch();
   const { organizers, loadingOrganizers } = useSelector(
-    (state) => state.organizer
+    (state) => state.organizer,
   );
 
   const [search, setSearch] = useState("");
@@ -27,8 +27,8 @@ const OrganizationList = () => {
     } else {
       setFilteredOrganizers(
         organizers.filter((org) =>
-          org.organizationName.toLowerCase().includes(search.toLowerCase())
-        )
+          org.organizationName.toLowerCase().includes(search.toLowerCase()),
+        ),
       );
     }
   }, [search, organizers]);
@@ -43,8 +43,8 @@ const OrganizationList = () => {
     );
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-bold mb-6 mt-20 text-indigo-500 text-center">
+    <div className="p-4 sm:p-6">
+      <h2 className="text-3xl font-bold mb-6 mt-16 text-indigo-500 text-center">
         Organizations
       </h2>
 
@@ -68,10 +68,10 @@ const OrganizationList = () => {
           {filteredOrganizers.map((org) => (
             <div
               key={org._id}
-              className="border rounded-xl p-5 flex flex-col items-center text-center bg-linear-to-br from-white to-indigo-50 shadow-lg hover:shadow-2xl transition-shadow duration-300 h-72"
+              className="border rounded-xl p-4 sm:p-5 flex flex-col items-center text-center bg-linear-to-br from-white to-indigo-50 shadow-md hover:shadow-xl transition-shadow duration-300"
             >
               {/* Circular avatar */}
-              <div className="w-20 h-20 mb-4 flex items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-2xl font-semibold overflow-hidden">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 mb-4 flex items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-xl sm:text-2xl font-semibold overflow-hidden">
                 {org.imageUrl ? (
                   <img
                     src={org.imageUrl}
@@ -87,11 +87,11 @@ const OrganizationList = () => {
                 )}
               </div>
 
-              <h3 className="font-semibold text-xl text-gray-800 mb-1">
+              <h3 className="font-semibold text-lg sm:text-xl text-gray-800 mb-1">
                 {org.organizationName}
               </h3>
 
-              <p className="text-gray-600 text-sm mb-3">
+              <p className="text-gray-600 text-sm mb-3 line-clamp-3">
                 {org.description || "No description available."}
               </p>
 

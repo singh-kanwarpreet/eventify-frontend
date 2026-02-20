@@ -9,7 +9,7 @@ const ManageAttendance = () => {
   const dispatch = useDispatch();
 
   const registrationsFromRedux = useSelector(
-    (state) => state.organizer.eventRegistrations
+    (state) => state.organizerDashboard.eventRegistrations[eventId]
   );
 
   // local attendance state
